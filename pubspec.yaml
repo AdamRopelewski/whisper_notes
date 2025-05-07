@@ -1,0 +1,40 @@
+name: whisper_notes
+description: "Aplikacja do transkrypcji i podsumowania notatek głosowych"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  # Nawigacja
+  go_router: ^13.0.0
+  # Zarządzanie stanem
+  provider: ^6.1.1
+  # Obsługa plików i uprawnień
+  file_selector: ^1.0.2
+  permission_handler: ^11.3.0
+  path_provider: ^2.1.2
+  # Audio
+  record: ^5.0.4
+  just_audio: ^0.9.36
+  # HTTP klient
+  http: ^1.2.0
+  # Formatowanie
+  flutter_markdown: ^0.6.18
+  # Kopiowanie do schowka
+  clipboard: ^0.1.3
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

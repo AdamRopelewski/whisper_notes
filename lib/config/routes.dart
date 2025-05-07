@@ -5,6 +5,8 @@ import 'package:whisper_notes/screens/transcription_screen.dart';
 import 'package:whisper_notes/screens/summarization_screen.dart';
 
 final appRouter = GoRouter(
+  initialLocation: '/',
+  debugLogDiagnostics: true,
   routes: [
     GoRoute(
       path: '/',
@@ -16,10 +18,9 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/summarize',
-      name: 'summarize',
       builder: (context, state) {
-        final Map<String, dynamic> args = state.extra as Map<String, dynamic>? ?? {};
-        final String transcription = args['transcription'] as String? ?? '';
+        final extra = state.extra as Map<String, dynamic>?;
+        final transcription = extra?['transcription'] as String? ?? '';
         return SummarizationScreen(transcription: transcription);
       },
     ),

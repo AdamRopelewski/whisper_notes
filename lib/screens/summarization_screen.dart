@@ -89,6 +89,39 @@ class _SummarizationScreenState extends State<SummarizationScreen> {
     });
   }
 
+  Future<void> _pasteFromClipboard() async {
+    final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+    if (clipboardData?.text != null && clipboardData!.text!.isNotEmpty) {
+      setState(() {
+        // Get current cursor position
+        final currentPosition = _transcriptionController.selection.baseOffset;
+        
+        // If there's no valid cursor position, append to the end
+        if (currentPosition < 0) {
+          _transcriptionController.text += clipboardData.text!;
+        } else {
+          // Insert at cursor position
+          final before = _transcriptionController.text.substring(0, currentPosition);
+          final after = _transcriptionController.text.substring(currentPosition);
+          _transcriptionController.text = before + clipboardData.text! + after;
+          
+          // Move cursor to the end of pasted text
+          _transcriptionController.selection = TextSelection.fromPosition(
+            TextPosition(offset: currentPosition + clipboardData.text!.length),
+          );
+        }
+      });
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Dopisano tekst ze schowka')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Schowek jest pusty')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final promptStyleProvider = Provider.of<PromptStyleProvider>(context);
@@ -116,17 +149,27 @@ class _SummarizationScreenState extends State<SummarizationScreen> {
                           'Transkrypcja',
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.copy),
-                          tooltip: 'Kopiuj transkrypcję',
-                          onPressed: () => _copyToClipboard(_transcriptionController.text),
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.paste),
+                              tooltip: 'Wklej ze schowka',
+                              onPressed: _pasteFromClipboard,
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.copy),
+                              tooltip: 'Kopiuj transkrypcję',
+                              onPressed: () => _copyToClipboard(_transcriptionController.text),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     TextField(
                       controller: _transcriptionController,
-                      maxLines: 5,
+                      maxLines: 15,  
+                      minLines: 10,  
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Wpisz lub wklej transkrypcję tutaj...',

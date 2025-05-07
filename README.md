@@ -22,7 +22,7 @@ Aplikacja mobilna do transkrypcji i podsumowywania nagrań audio.
 
 1. Sklonuj repozytorium:
    ```
-   git clone https://github.com/twój-użytkownik/whisper_notes.git
+   git clone https://github.com/AdamRopelewski/whisper_notes.git
    ```
 2. Przejdź do katalogu projektu:
    ```
